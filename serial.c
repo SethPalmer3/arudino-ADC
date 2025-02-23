@@ -23,7 +23,7 @@ int serial_write(int len, char *data) {
   while (i++ < len) {
     while ((UCSR0A & (1 << UDRE0)) == 0)
       ;
-    UDR0 = data;
+    UDR0 = data[i];
   }
   return 0;
 }

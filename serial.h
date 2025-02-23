@@ -8,4 +8,6 @@ typedef struct arudino_serial {
   void (*free)(struct arudino_serial *);
 } Serial;
 
+Serial init_serial(int);
+
 #endif // !ARDN_SERIAL
