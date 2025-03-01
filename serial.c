@@ -1,16 +1,12 @@
 #include "serial.h"
 #include <avr/io.h>
+#include <util/delay.h>
 
-int serial_begin();
-int serial_write(int, char *);
+#define FOSC 16000000UL
+#define MYUBRR(rate) (FOSC / 16UL / rate - 1)
 
-Serial init_serial(int baud) {
-  Serial s = {.baudrate = baud, .begin = serial_begin, .write = serial_write};
-  return s;
-}
-
-int serial_begin() {
-  unsigned long myubrr = 16000000UL / 16UL / baudrate - 1;
+int serial_begin(unsigned long baudrate) {
+  unsigned long myubrr = MYUBRR(baudrate);
   UBRR0H = (unsigned char)(myubrr >> 8);
   UBRR0L = (unsigned char)(myubrr);
   UCSR0B = (1 << RXEN0) | (1 << TXEN0);
@@ -20,10 +16,12 @@ int serial_begin() {
 
 int serial_write(int len, char *data) {
   int i = 0;
-  while (i++ < len) {
-    while ((UCSR0A & (1 << UDRE0)) == 0)
-      ;
+  while (i < len) {
+    while (!(UCSR0A & (1 << UDRE0))) {
+    }
     UDR0 = data[i];
+    _delay_ms(1000);
+    i++;
   }
   return 0;
 }

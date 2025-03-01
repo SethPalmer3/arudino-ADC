@@ -1,8 +1,11 @@
 #include "adc.h"
 
-void start_conversation(char power_redc, char adc_conv) {
-  power_redc = 0;
-  adc_conv = 1;
+#define MUX(pin) pin
+
+void init_ADC() {
+  ADMUX = MUX(0);       // setting data pin
+  PPR |= 0b11111110;    // Disabling ADC power saving
+  ADCSRA |= 0b11111111; // Enabling ADC conversation
 }
 
 unsigned short get_data() {
