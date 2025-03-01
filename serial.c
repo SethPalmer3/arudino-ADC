@@ -20,7 +20,7 @@ int serial_write(int len, char *data) {
     while (!(UCSR0A & (1 << UDRE0))) {
     }
     UDR0 = data[i];
-    _delay_ms(1000);
+    // _delay_ms(1000);
     i++;
   }
   return 0;
